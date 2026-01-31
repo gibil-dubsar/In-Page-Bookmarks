@@ -1,0 +1,13 @@
+{
+  "name": "in-page-bookmarks-extension",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "chrome-types": "^0.1.292",
+    "typescript": "^5.4.5"
+  }
+}

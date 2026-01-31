@@ -1,0 +1,372 @@
+/* Modern In-Page Bookmarks Extension Styles */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  width: 315px;
+  min-width: 315px;
+  max-width: 315px;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  background: #f5f5f5;
+  color: #1a1a1a;
+  line-height: 1.5;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  width: 315px;
+  min-width: 315px;
+  max-width: 315px;
+  overflow-x: hidden;
+  font-size: 14px;
+}
+
+.container {
+  width: 315px;
+  min-width: 315px;
+  max-width: 315px;
+  min-height: 500px;
+  max-height: 600px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 20px;
+  background: white;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.header-icon {
+  width: 20px;
+  height: 20px;
+  color: #333;
+  flex-shrink: 0;
+}
+
+.header h1 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+/* Bookmark Form */
+.bookmark-form {
+  padding: 16px 20px;
+  background: white;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.input-group input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid #d0d0d0;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  background: white;
+  color: #1a1a1a;
+  font-weight: 400;
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: #666;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+}
+
+.input-group input::placeholder {
+  color: #999;
+}
+
+/* Buttons */
+.btn-save {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 8px;
+  background: #333;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.btn-save:hover {
+  background: #000;
+  transform: scale(1.05);
+}
+
+.btn-save:active {
+  transform: scale(0.95);
+}
+
+.btn-save svg {
+  width: 18px;
+  height: 18px;
+}
+
+.btn-small {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+.btn-small:hover {
+  opacity: 1;
+  transform: scale(1.15);
+}
+
+.btn-small svg {
+  width: 18px;
+  height: 18px;
+}
+
+.btn-jump {
+  color: #2e7d32;
+}
+
+.btn-delete {
+  color: #c62828;
+}
+
+/* Bookmarks Section */
+.bookmarks-section {
+  padding: 12px 20px;
+  max-height: 450px;
+  overflow-y: auto;
+  flex: 1;
+  background: #fafafa;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.section-header h3 {
+  font-size: 13px;
+  font-weight: 600;
+  color: #666;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.bookmark-count {
+  background: #e0e0e0;
+  color: #666;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  min-width: 20px;
+  text-align: center;
+}
+
+.bookmarks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* No Bookmarks State */
+.no-bookmarks {
+  text-align: center;
+  padding: 40px 20px;
+  color: #999;
+}
+
+.no-bookmarks-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 12px;
+  opacity: 0.4;
+  color: #999;
+}
+
+.no-bookmarks-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.no-bookmarks p {
+  font-size: 14px;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #666;
+}
+
+.no-bookmarks .hint {
+  font-size: 12px;
+  color: #999;
+}
+
+/* Bookmark Item */
+.bookmark-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  transition: all 0.15s ease;
+}
+
+.bookmark-item:hover {
+  border-color: #999;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.bookmark-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+.bookmark-name {
+  font-weight: 700;
+  font-size: 13px;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  min-width: 0;
+}
+
+.bookmark-position {
+  font-size: 12px;
+  color: #666;
+  font-weight: 400;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.bookmark-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+
+/* Scrollbar Styling */
+.bookmarks-section::-webkit-scrollbar {
+  width: 6px;
+}
+
+.bookmarks-section::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 3px;
+}
+
+.bookmarks-section::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+
+.bookmarks-section::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+/* Responsive Design */
+@media (max-width: 450px) {
+  .container {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+  }
+  
+  .bookmark-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .bookmark-actions {
+    margin-left: 0;
+    align-self: flex-end;
+  }
+}
+
+/* Loading States */
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+button:disabled:hover {
+  transform: none !important;
+}
+
+/* Focus States for Accessibility */
+button:focus,
+input:focus {
+  outline: 2px solid #666;
+  outline-offset: 2px;
+}
+
+/* Animation for bookmark items */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.bookmark-item {
+  animation: fadeInUp 0.2s ease-out;
+}
+
+/* Improved typography */
+h1, h2, h3 {
+  font-feature-settings: "kern" 1, "liga" 1;
+  text-rendering: optimizeLegibility;
+}

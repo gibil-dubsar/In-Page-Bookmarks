@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=315, initial-scale=1.0, user-scalable=no">
+  <title>In-Page Bookmarks</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <svg class="header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+      </svg>
+      <h1>In-Page Bookmarks 1</h1>
+    </div>
+
+    <div class="bookmark-form">
+      <div class="input-group">
+        <input type="text" id="bookmarkName" placeholder="Enter bookmark name..." maxlength="50">
+        <button id="saveBookmarkBtn" class="btn-save" title="Save bookmark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="20,6 9,17 4,12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="bookmarks-section">
+      <div class="section-header">
+        <h3>Saved Bookmarks</h3>
+        <div class="bookmark-count" id="bookmarkCount">0</div>
+      </div>
+      <div id="bookmarksList" class="bookmarks-list">
+        <div class="no-bookmarks">
+          <div class="no-bookmarks-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+            </svg>
+          </div>
+          <p>No bookmarks saved yet</p>
+          <p class="hint">Scroll to a position and save it as a bookmark</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
