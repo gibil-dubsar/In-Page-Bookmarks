@@ -8,6 +8,9 @@ pnpm-debug.log*
 # TypeScript
 *.tsbuildinfo
 
+# Build output
+extension/
+
 # Environment
 .env
 .env.*
