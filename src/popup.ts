@@ -15,25 +15,22 @@
  * @type {Object|null} currentTab - Currently active tab information
  * @type {Array} bookmarks - Array of bookmarks for the current page
  */
-interface Bookmark {
-  id: string;
-  name: string;
-  scrollPosition: number;
-  url: string;
-  timestamp: string;
-}
 
-interface Window {
-  jumpToBookmark: (bookmarkId: string) => void;
-  deleteBookmark: (bookmarkId: string) => void;
-  testScroll: (position: number) => void;
-  scrollToPosition: (position: number) => void;
-  PDFViewerApplication?: {
-    page: number;
-    pagesCount: number;
-    currentScale: number;
-    pdfDocument?: unknown;
-  };
+import { Bookmark, sortBookmarksByTimestamp, formatRelativeTime } from './lib/bookmarks';
+
+declare global {
+  interface Window {
+    jumpToBookmark: (bookmarkId: string) => void;
+    deleteBookmark: (bookmarkId: string) => void;
+    testScroll: (position: number) => void;
+    scrollToPosition: (position: number) => void;
+    PDFViewerApplication?: {
+      page: number;
+      pagesCount: number;
+      currentScale: number;
+      pdfDocument?: unknown;
+    };
+  }
 }
 
 type NotificationType = 'info' | 'success' | 'error';
@@ -450,9 +447,7 @@ function renderBookmarks(): void {
   }
 
   // Sort bookmarks by creation time (newest first)
-  const sortedBookmarks = [...bookmarks].sort(
-    (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-  );
+  const sortedBookmarks = sortBookmarksByTimestamp(bookmarks);
 
   // Generate HTML for each bookmark
   bookmarksList.innerHTML = sortedBookmarks.map(bookmark => `
@@ -513,20 +508,9 @@ function escapeHtml(text: string): string {
  * // Returns: "2h ago" (if current time is 12:30)
  */
 function formatDate(timestamp: string): string {
-  const date = new Date(timestamp);
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffMins = Math.floor(diffMs / 60000);
-  const diffHours = Math.floor(diffMs / 3600000);
-  const diffDays = Math.floor(diffMs / 86400000);
-
-  if (diffMins < 1) return 'Just now';
-  if (diffMins < 60) return `${diffMins}m ago`;
-  if (diffHours < 24) return `${diffHours}h ago`;
-  if (diffDays < 7) return `${diffDays}d ago`;
-  
-  return date.toLocaleDateString();
+  return formatRelativeTime(timestamp);
 }
+
 
 /**
  * Show an error notification
