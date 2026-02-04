@@ -1,47 +1,102 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const path = require('node:path');
-const fs = require('node:fs');
-const { loadEnv } = require('../helpers/load-env');
+const {
+  getUiTestConfig,
+  launchExtensionBrowser,
+  openPopupPage,
+  createTestServer
+} = require('../helpers/extension-e2e');
 
-loadEnv();
 
-const chromePath = process.env.CHROME_PATH || process.env.CHROMIUM_PATH;
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+const { setMaxIdleHTTPParsers } = require('node:http');
 
-if (!chromePath) {
-  test.skip('UI test skipped: CHROME_PATH or CHROMIUM_PATH not set in env or .env');
-} else if (!fs.existsSync(chromePath)) {
-  test.skip(`UI test skipped: browser path not found at ${chromePath}`);
+const { skipReason, config } = getUiTestConfig();
+
+if (skipReason) {
+  test.skip(skipReason);
 } else {
-  const puppeteer = require('puppeteer-core');
+  test('popup UI renders base elements (via chrome.action.openPopup)', async () => {
+    console.log('extension Path:', config.extensionDir);
+    const { browser, extensionId, serviceWorkerTarget, cleanup } = await launchExtensionBrowser(config);
+    console.log('extensionId:', extensionId);
+    console.log(`chrome-extension://${extensionId}/UI.html`);
+    let popupPage;
 
-  test('popup UI renders base elements', async () => {
-    const extensionDir = path.join(__dirname, '..', '..', 'extension');
-    const browser = await puppeteer.launch({
-      executablePath: chromePath,
-      headless: false,
-      args: [
-        `--disable-extensions-except=${extensionDir}`,
-        `--load-extension=${extensionDir}`,
-        '--no-sandbox'
-      ]
-    });
+    try {
+      const result = await openPopupPage({ browser, extensionId, serviceWorkerTarget });
+      popupPage = result.popupPage;
 
-    const page = await browser.newPage();
-    await page.goto('https://example.com');
+      const headerText = await popupPage.$eval('h1', (el) => el.textContent || '');
+      assert.match(headerText, /In-Page Bookmarks/);
+    } finally {
+      if (popupPage) {
+        await popupPage.close().catch(() => {});
+      }
+      await browser.close();
+      if (cleanup) {
+        cleanup();
+      }
+    }
+  });
 
-    const targets = await browser.targets();
-    const extensionTarget = targets.find((target) => target.type() === 'background_page' || target.type() === 'service_worker');
-    const extensionId = extensionTarget && extensionTarget.url().split('/')[2];
-    assert.ok(extensionId);
+  test('popup can save a bookmark and updates storage', async () => {
+    const { storageKey } = require('../../extension/lib/background-logic.js');
+    const { browser, extensionId, serviceWorkerTarget, cleanup } = await launchExtensionBrowser(config);
+    const server = await createTestServer();
+    let page;
+    let popupPage;
 
-    const popupUrl = `chrome-extension://${extensionId}/UI.html`;
-    const popupPage = await browser.newPage();
-    await popupPage.goto(popupUrl);
+    try {
+      page = await browser.newPage();
+      await page.goto(server.url, { waitUntil: 'domcontentloaded' });
+      await page.bringToFront();
+      await page.evaluate(() => window.scrollTo(0, 400));
+      await new Promise((resolve) => setTimeout(resolve, 200));
 
-    const headerText = await popupPage.$eval('h1', (el) => el.textContent);
-    assert.match(headerText, /In-Page Bookmarks/);
+      const result = await openPopupPage({
+        browser,
+        extensionId,
+        serviceWorkerTarget
+      });
+      popupPage = result.popupPage;
 
-    await browser.close();
+      await popupPage.waitForSelector('#bookmarkName');
+      await popupPage.type('#bookmarkName', 'Test Bookmark');
+      await popupPage.click('#saveBookmarkBtn');
+
+      await popupPage.waitForSelector('.bookmark-item');
+      const countText = await popupPage.$eval('#bookmarkCount', (el) => el.textContent || '');
+      assert.equal(countText.trim(), '1');
+
+      const nameText = await popupPage.$eval('.bookmark-name', (el) => el.textContent || '');
+      assert.equal(nameText.trim(), 'Test Bookmark');
+
+      const key = storageKey(page.url());
+      const stored = await popupPage.evaluate((storageKeyValue) => {
+        return new Promise((resolve) => {
+          chrome.storage.local.get([storageKeyValue], (data) => {
+            resolve(data[storageKeyValue] || []);
+          });
+        });
+      }, key);
+
+      assert.equal(stored.length, 1);
+      assert.equal(stored[0].name, 'Test Bookmark');
+    } finally {
+      if (popupPage) {
+        await popupPage.close().catch(() => {});
+      }
+      if (page) {
+        await page.close().catch(() => {});
+      }
+      await browser.close().catch(() => {});
+      if (cleanup) {
+        cleanup();
+      }
+      await server.close();
+    }
   });
 }

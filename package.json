@@ -9,7 +9,7 @@
   },
   "devDependencies": {
     "chrome-types": "^0.1.292",
-    "puppeteer-core": "^23.11.1",
+    "puppeteer-core": "^24.36.1",
     "typescript": "^5.4.5"
   }
 }

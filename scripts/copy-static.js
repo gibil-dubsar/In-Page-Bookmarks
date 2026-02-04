@@ -13,7 +13,17 @@ if (!fs.existsSync(outDir)) {
   fs.mkdirSync(outDir, { recursive: true });
 }
 
-const files = ['manifest.json', 'UI.html', 'style.css'];
+const manifestPath = path.join(staticDir, 'manifest.json');
+const manifestOutPath = path.join(outDir, 'manifest.json');
+const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+
+if (process.env.EXTENSION_KEY && typeof process.env.EXTENSION_KEY === 'string') {
+  manifest.key = process.env.EXTENSION_KEY;
+}
+
+fs.writeFileSync(manifestOutPath, JSON.stringify(manifest, null, 2));
+
+const files = ['UI.html', 'style.css'];
 for (const file of files) {
   const src = path.join(staticDir, file);
   const dest = path.join(outDir, file);
