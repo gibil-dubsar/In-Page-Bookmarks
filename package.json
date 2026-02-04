@@ -5,10 +5,11 @@
   "scripts": {
     "build": "tsc -p tsconfig.json && node scripts/copy-static.js",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "node --test"
+    "test": "npm run build && node --test"
   },
   "devDependencies": {
     "chrome-types": "^0.1.292",
+    "puppeteer-core": "^24.36.1",
     "typescript": "^5.4.5"
   }
 }
